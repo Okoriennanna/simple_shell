@@ -17,14 +17,14 @@ void no_command(int ptrd, char **comand_lst, int count, char **argmt)
 
 	write(STDOUT_FILENO, argmt[0], _strlen(argmt[0]));
 	write(STDOUT_FILENO, ": ", 2);
-	print_number(count);
 	write(STDOUT_FILENO, ": ", 2);
-	write(STDOUT_FILENO, comand_lst[0], _strlen(cmd_list[0]));
+	putint(count);
+	write(STDOUT_FILENO, comand_lst[0], _strlen(comand_lst[0]));
 	write(STDOUT_FILENO, ": not found\n", 12);
-	while (ln < i)
+	while (ln < ptrd)
 	{
-		free(cmd_list[ln]);
-		l++;
+		free(comand_lst[ln]);
+		ln++;
 	}
 	free(comand_lst);
 }
@@ -44,7 +44,7 @@ void putint(int n)
 	if (n < 0)
 	{
 		i = -n;
-		_putchar('-');
+		_putchr('-');
 	}
 	else
 	{
@@ -52,7 +52,7 @@ void putint(int n)
 	}
 	if (i / 10)
 	{
-		print_number(i / 10);
+		putint(i / 10);
 	}
 	_putchr(i % 10 + '0');
 }

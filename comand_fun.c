@@ -11,7 +11,7 @@
 
 char *stringcpy(char *ptrdestin, char *ptrsorc)
 {
-	int i;
+	int a;
 
 	for (a = 0; ptrsorc[a] != '\0'; a++)
 	{

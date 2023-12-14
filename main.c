@@ -13,13 +13,12 @@ int main(__attribute__((unused)) int ac, char **argmt)
 {
 	char *command = NULL;
 	size_t n = 0;
-	int count = 0,
-	ssize_t num_read = 1;
+	int count = 0, num_read = 1;
 
 	while (num_read != -1)
 	{
 		num_read++;
-		signal(SIGINT, signal_handler);
+		signal(SIGINT, sig_handl);
 		if (isatty(STDIN_FILENO) == 1)
 		{
 			write(STDOUT_FILENO, ":) ", 2);
@@ -31,7 +30,7 @@ int main(__attribute__((unused)) int ac, char **argmt)
 			free(command);
 			exit(0);
 		}
-		toknizer(command, count, argmt);
+		toknizor(command, count, argmt);
 		free(command);
 		command = NULL;
 	}
@@ -60,32 +59,32 @@ int toknizor(char *comandl, int countl, char **argmt)
 	}
 	if (num_tokens != 0)
 	{
-		token_array = _calloc((num_tokens + 1), (sizeof(char *)));
-		if (token_array == NULL)
+		argv = _malloc1((num_tokens + 1), (sizeof(char *)));
+		if (argv == NULL)
 			return ('\0');
 		token = strtok(comandl, _delim);
 		while (token != NULL)
 		{
-			token_array[i] = _calloc((_strlen(token) + 1), sizeof(char));
-			if (token_array[i] == NULL)
+			argv[i] = _malloc1((_strlen(token) + 1), sizeof(char));
+			if (argv[i] == NULL)
 			{
 				while (j < i)
-					free(token_array[j]), j++;
-				free(token_array);
+					free(argv[j]), j++;
+				free(argv);
 			}
-			_strncpy(token_array[i], token, _strlen(token) + 1);
+			_strncpy(argv[i], token, _strlen(token) + 1);
 			token = strtok(NULL, _delim), i++;
 		}
-		token_array[i] = NULL;
-		if (_strcmp(token_array[0], envi) == 0 ||
-				_strcmp(token_array[0], "printenv") == 0)
-			_env();
-		if (_strcmp(token_array[0], exit) == 0)
-			an_exit(token_array, num_tokens, comandl, exit_status);
-		exit_status = _exec(token_array, num_tokens, comandl, count, argmt);
-		while (l < num_tokens)
-			free(token_array[l]), l++;
-		free(token_array);
+		argv[i] = NULL;
+		if (_strcomp(argv[0], envi) == 0 ||
+				_strcomp(argv[0], "printenv") == 0)
+			_envt();
+		if (_strcomp(argv[0], exit) == 0)
+			an_exit(argv, num_tokens, comandl, exit_status);
+		exit_status = _exec(argv, num_tokens, comandl, countl, argmt);
+		while (k < num_tokens)
+			free(argv[k]), k++;
+		free(argv);
 	}
 	return (exit_status);
 }
@@ -107,7 +106,7 @@ int _exec(char **comand_lst, int i, char *comandl, int count, char **argmt)
 	pid_t child_pid;
 	int status, exit_status = 0;
 	struct stat st;
-	char *directory, *no_command = {"it is not a command"};
+	char *directory, *not_command = {"it is not a command"};
 
 	switch (child_pid = fork())
 	{
@@ -115,7 +114,7 @@ int _exec(char **comand_lst, int i, char *comandl, int count, char **argmt)
 		perror("fork error");
 		return (1);
 	case 0:
-		if (stat(comand_lst[0], &st) == 0 && st.st_mode & S_IXUSR)
+		if (strcat(comand_lst[0], &st) == 0 && st.st_mode & S_IXUSR)
 		{
 			if (execve(comand_lst[0], comand_lst, environ) == -1)
 				perror(":) Error"), exit(exit_status);
@@ -125,9 +124,9 @@ int _exec(char **comand_lst, int i, char *comandl, int count, char **argmt)
 		else
 		{
 			directory = _path(comand_lst[0]);
-			if (_strcmp(directory, not_command) == 0)
+			if (_strcomp(directory, not_command) == 0)
 			{
-				command_not_found(i, comand_lst, count, argmt), free(comandl);
+				no_command(i, comand_lst, count, argmt); free(comandl);
 				exit(EXIT_FAILURE);
 			}
 			else
@@ -161,7 +160,7 @@ char *_path(char *command)
 	{
 		env = _strdup(environ[i]);
 		token = strtok(env, "=");
-		if (_strcmp(token, var) == 0)
+		if (_strcomp(token, var) == 0)
 		{
 			token = strtok(NULL, "=");
 			dir_temp = _strdup(token);
@@ -190,11 +189,11 @@ char *directory(char *temporal_dir, char *command)
 	token = strtok(temporal_dir, ":");
 	while (token != NULL)
 	{
-		path = _calloc(_strlen(token) + _strlen(command) + 2, sizeof(char));
-		_strcpy(path, token);
+		path = _malloc1(_strlen(token) + _strlen(command) + 2, sizeof(char));
+		stringcpy(path, token);
 		_strcat(path, slash);
 		_strcat(path, command);
-		if (stat(path, &st) == 0 && st.st_mode & S_IXUSR)
+		if (strcat(path, &st) == 0 && st.st_mode & S_IXUSR)
 		{
 			flag++;
 			break;

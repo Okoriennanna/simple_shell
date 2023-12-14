@@ -55,17 +55,17 @@ char *_strdup(char *strptr)
 	int a = 0, b = 0;
 	char *x = NULL;
 
-	if (str == NULL)
+	if (strptr == NULL)
 		return (NULL);
-	while (str[x] != '\0')
+	while (strptr[a] != '\0')
 	{
 		a++;
 	}
-	a = _malloc((a + 1), sizeof(char));
+	x = _malloc1((a + 1), sizeof(char));
 	if (x != NULL)
 	{
-		for (; str[b]; b++)
-			x[b] = str[b\];
+		for (; strptr[b]; b++)
+			x[b] = strptr[b];
 		x[b] = '\0';
 	}
 	else
@@ -86,12 +86,12 @@ char *_strcat(char *destin, char *sorc)
 {
 	int a, b;
 
-	for (a = 0; destin[i] != '\0'; a++)
+	for (a = 0; destin[a] != '\0'; a++)
 	{
 	}
 
 	for (b = 0; sorc[b] != '\0'; a++, b++)
-		destin[a] = src[b];
+		destin[a] = sorc[b];
 
 	destin[a] = '\0';
 
