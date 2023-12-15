@@ -55,8 +55,8 @@ int toknizor(char *comandl, int count, char **argmt)
 	token = strtok(cpycomandl, _delim);
 	while (token != NULL)
 	{
-		token = strtok(NULL, _delim);
-		num_tokens++;
+		token = strtok(NULL, _delim), num_tokens++;
+		free(cpycomandl);
 	}
 	if (num_tokens != 0)
 	{
