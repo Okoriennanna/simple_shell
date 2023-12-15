@@ -1,4 +1,5 @@
 #include "simplshel.h"
+#include <sys/stat.h>
 
 /**
  * main - entry pt that print a smilly prompt.
@@ -114,10 +115,10 @@ int _exec(char **comand_lst, int i, char *comandl, int count, char **argmt)
 		perror("fork error");
 		return (1);
 	case 0:
-		if (strcat(comand_lst[0], &st) == 0 && st.st_mode & S_IXUSR)
+		if (stat(comand_lst[0], &st) == 0 && st.st_mode & S_IXUSR)
 		{
 			if (execve(comand_lst[0], comand_lst, environ) == -1)
-				perror(":) Error"), exit(exit_status);
+				perror(":( Error"), exit(exit_status);
 			else
 				exit(EXIT_SUCCESS);
 		}
@@ -126,13 +127,13 @@ int _exec(char **comand_lst, int i, char *comandl, int count, char **argmt)
 			directory = _path(comand_lst[0]);
 			if (_strcomp(directory, not_command) == 0)
 			{
-				no_command(i, comand_lst, count, argmt); free(comandl);
+				no_command(i, comand_lst, count, argmt), free(comandl);
 				exit(EXIT_FAILURE);
 			}
 			else
 			{
 				if (execve(directory, comand_lst, environ) == -1)
-					free(directory), perror(":( Error"), exit(exit_status);
+					free(directory), perror(":) Error"), exit(exit_status);
 				else
 					exit(EXIT_SUCCESS);
 			}
@@ -193,7 +194,7 @@ char *directory(char *temporal_dir, char *command)
 		stringcpy(path, token);
 		_strcat(path, slash);
 		_strcat(path, command);
-		if (strcat(path, &st) == 0 && st.st_mode & S_IXUSR)
+		if (stat(path, &st) == 0 && st.st_mode & S_IXUSR)
 		{
 			flag++;
 			break;
