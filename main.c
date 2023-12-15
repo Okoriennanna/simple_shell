@@ -75,6 +75,7 @@ int toknizor(char *comandl, int count, char **argmt)
 			_strncpy(argv[i], token, _strlen(token) + 1);
 			token = strtok(NULL, _delim), i++;
 		}
+		argv[i] = NULL;
 		if (_strcomp(argv[0], envi) == 0 ||
 				_strcomp(argv[0], "printenv") == 0)
 			_envt();
@@ -84,7 +85,6 @@ int toknizor(char *comandl, int count, char **argmt)
 		while (k < num_tokens)
 			free(argv[k]), k++;
 	}
-	argv[i] = NULL;
 	free(cpycomandl);
 	free(argv);
 	return (exit_status);
@@ -118,7 +118,7 @@ int _exec(char **comand_lst, int i, char *comandl, int count, char **argmt)
 		if (stat(comand_lst[0], &st) == 0 && st.st_mode & S_IXUSR)
 		{
 			if (execve(comand_lst[0], comand_lst, environ) == -1)
-				perror(":( Error"), exit(exit_status);
+				perror(":) Error"), exit(exit_status);
 			else
 				exit(EXIT_SUCCESS);
 		}

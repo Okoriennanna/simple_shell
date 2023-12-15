@@ -13,7 +13,6 @@
 #define _delim " \n\r\a\t"
 
 extern char **environ;
-int main(__attribute__((unused)) int ac, char **argmt);
 int toknizor(char *comandl, int countl, char **argmt);
 int _exec(char **command_lst, int i, char *comandl, int count, char **argmt);
 char *_path(char *command);
