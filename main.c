@@ -56,7 +56,6 @@ int toknizor(char *comandl, int count, char **argmt)
 	while (token != NULL)
 	{
 		token = strtok(NULL, _delim), num_tokens++;
-		free(cpycomandl);
 	}
 	if (num_tokens != 0)
 	{
@@ -85,8 +84,9 @@ int toknizor(char *comandl, int count, char **argmt)
 		exit_status = _exec(argv, num_tokens, comandl, count, argmt);
 		while (k < num_tokens)
 			free(argv[k]), k++;
-		free(argv);
 	}
+	free(cpycomandl);
+	free(argv);
 	return (exit_status);
 }
 
