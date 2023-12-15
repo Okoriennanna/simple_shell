@@ -75,7 +75,6 @@ int toknizor(char *comandl, int count, char **argmt)
 			_strncpy(argv[i], token, _strlen(token) + 1);
 			token = strtok(NULL, _delim), i++;
 		}
-		argv[i] = NULL;
 		if (_strcomp(argv[0], envi) == 0 ||
 				_strcomp(argv[0], "printenv") == 0)
 			_envt();
@@ -85,6 +84,7 @@ int toknizor(char *comandl, int count, char **argmt)
 		while (k < num_tokens)
 			free(argv[k]), k++;
 	}
+	argv[i] = NULL;
 	free(cpycomandl);
 	free(argv);
 	return (exit_status);
