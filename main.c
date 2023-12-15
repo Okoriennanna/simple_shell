@@ -5,12 +5,12 @@
  * main - entry pt that print a smilly prompt.
  *
  * @ac: argument counter
- * @argmt: argument vector
+ * @gmt: argument vector
  *
  * Return: Always 0.
  */
 
-int main(__attribute__((unused)) int ac, char **argmt)
+int main(__attribute__((unused)) int ac, char **gmt)
 {
 	char *command = NULL;
 	size_t n = 0;
@@ -31,7 +31,7 @@ int main(__attribute__((unused)) int ac, char **argmt)
 			free(command);
 			exit(0);
 		}
-		toknizor(command, count, argmt);
+		toknizor(command, count, gmt);
 		free(command);
 		command = NULL;
 	}
@@ -41,12 +41,12 @@ int main(__attribute__((unused)) int ac, char **argmt)
 /**
  * toknizor - a fun breaks a strings into tokens.
  * @comandl: a string.
- * @countl: line counter
+ * @count: line counter
  * @argmt: argument vector
  * Return: A list of strings.
  */
 
-int toknizor(char *comandl, int countl, char **argmt)
+int toknizor(char *comandl, int count, char **argmt)
 {
 	char **argv, *token, *cpycomandl = 0, *exit = {"exit"}, *envi = {"envt"};
 	int num_tokens = 0, i = 0, j = 0, k = 0, exit_status = 0;
@@ -55,8 +55,8 @@ int toknizor(char *comandl, int countl, char **argmt)
 	token = strtok(cpycomandl, _delim);
 	while (token != NULL)
 	{
-		token = strtok(NULL, _delim), num_tokens++;
-	free(cpycomandl);
+		token = strtok(NULL, _delim);
+		num_tokens++;
 	}
 	if (num_tokens != 0)
 	{
@@ -82,7 +82,7 @@ int toknizor(char *comandl, int countl, char **argmt)
 			_envt();
 		if (_strcomp(argv[0], exit) == 0)
 			an_exit(argv, num_tokens, comandl, exit_status);
-		exit_status = _exec(argv, num_tokens, comandl, countl, argmt);
+		exit_status = _exec(argv, num_tokens, comandl, count, argmt);
 		while (k < num_tokens)
 			free(argv[k]), k++;
 		free(argv);
