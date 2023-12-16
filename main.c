@@ -49,45 +49,47 @@ int main(__attribute__((unused)) int ac, char **gmt)
 int toknizor(char *comandl, int count, char **argmt)
 {
 	char **argv, *token, *cpycomandl = 0, *exit = {"exit"}, *envi = {"envt"};
-	int num_tokens = 0, i = 0, j = 0, k = 0, exit_status = 0;
+	int num_tokens = 0, i = 0, j, k, exit_status = 0;
 
 	cpycomandl = _strdup(comandl);
 	token = strtok(cpycomandl, _delim);
-	argv = _malloc1((count + 1), sizeof(char *));
-	if (argv == NULL)
-		return ('\0');
 	while (token != NULL)
 	{
-		argv[i] = _malloc1((_strlen(token) + 1), sizeof(char));
-
-		if (argv[i] == NULL)
-		{
-			for (j = 0; j < i; ++j)
-				free(argv[j]);
-			free(argv);
-			free(cpycomandl);
+		token = strtok(NULL, _delim), num_tokens++;
+	}
+	if (num_tokens != 0)
+	{
+		argv = _malloc1((num_tokens + 1), (sizeof(char *)));
+		if (argv == NULL)
 			return ('\0');
+		token = strtok(comandl, _delim);
+		while (token != NULL)
+		{
+			argv[i] = _malloc1((_strlen(token) + 1), sizeof(char));
+			if (argv[i] == NULL)
+			{
+				for (j = 0; j < i; j++)
+					free(argv[j]);;
+				free(argv);
+			}
+			_strncpy(argv[i], token, _strlen(token) + 1);
+			token = strtok(NULL, _delim), i++;
 		}
-		_strncpy(argv[i], token, _strlen(token) + 1);
-		token = strtok(NULL, _delim), ++i, ++num_tokens;
-	}
-	argv[i] = NULL;
-	free(cpycomandl);
-	if (_strcomp(argv[0], envi) == 0 || _strcomp(argv[0], "printenv") == 0)
-		_envt();
-	else if (_strcomp(argv[0], exit) == 0)
-		an_exit(argv, num_tokens, comandl, exit_status);
-	else
-	{
+		argv[i] = NULL;
+		if (_strcomp(argv[0], envi) == 0 ||
+				_strcomp(argv[0], "printenv") == 0)
+			_envt();
+		if (_strcomp(argv[0], exit) == 0)
+			an_exit(argv, num_tokens, comandl, exit_status);
 		exit_status = _exec(argv, num_tokens, comandl, count, argmt);
+		for (k = 0; k < num_tokens; k++)
+			free(argv[k]);
 	}
-	for (k = 0; k < num_tokens; ++k)
-	{
-		free(argv[k]);
-	}
-	free(argv);
+		free(argv);
+
 	return (exit_status);
 }
+
 /**
  * _exec - Creates a child processs to start a new programm.
  *
@@ -116,7 +118,7 @@ int _exec(char **comand_lst, int i, char *comandl, int count, char **argmt)
 		if (stat(comand_lst[0], &st) == 0 && st.st_mode & S_IXUSR)
 		{
 			if (execve(comand_lst[0], comand_lst, environ) == -1)
-				perror(":) Error"), exit(exit_status);
+				perror(":( Error"), exit(exit_status);
 			else
 				exit(EXIT_SUCCESS);
 		}
