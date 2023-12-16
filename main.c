@@ -53,43 +53,41 @@ int toknizor(char *comandl, int count, char **argmt)
 
 	cpycomandl = _strdup(comandl);
 	token = strtok(cpycomandl, _delim);
+	argv = _malloc1((count + 1), sizeof(char *));
+	if (argv == NULL)
+		return ('\0');
 	while (token != NULL)
 	{
-		token = strtok(NULL, _delim), num_tokens++;
-	}
-	if (num_tokens != 0)
-	{
-		argv = _malloc1((num_tokens + 1), (sizeof(char *)));
-		if (argv == NULL)
-			return ('\0');
-		token = strtok(comandl, _delim);
-		while (token != NULL)
+		argv[i] = _malloc1((_strlen(token) + 1), sizeof(char));
+
+		if (argv[i] == NULL)
 		{
-			argv[i] = _malloc1((_strlen(token) + 1), sizeof(char));
-			if (argv[i] == NULL)
-			{
-				while (j < i)
-					free(argv[j]), j++;
-				free(argv);
-			}
-			_strncpy(argv[i], token, _strlen(token) + 1);
-			token = strtok(NULL, _delim), i++;
+			for (j = 0; j < i; ++j)
+				free(argv[j]);
+			free(argv);
+			free(cpycomandl);
+			return ('\0');
 		}
-		argv[i] = NULL;
-		if (_strcomp(argv[0], envi) == 0 ||
-				_strcomp(argv[0], "printenv") == 0)
-			_envt();
-		if (_strcomp(argv[0], exit) == 0)
-			an_exit(argv, num_tokens, comandl, exit_status);
-		exit_status = _exec(argv, num_tokens, comandl, count, argmt);
-		while (k < num_tokens)
-			free(argv[k]), k++;
+		_strncpy(argv[i], token, _strlen(token) + 1);
+		token = strtok(NULL, _delim), ++i, ++num_tokens;
 	}
+	argv[i] = NULL;
 	free(cpycomandl);
+	if (_strcomp(argv[0], envi) == 0 || _strcomp(argv[0], "printenv") == 0)
+		_envt();
+	else if (_strcomp(argv[0], exit) == 0)
+		an_exit(argv, num_tokens, comandl, exit_status);
+	else
+	{
+		exit_status = _exec(argv, num_tokens, comandl, count, argmt);
+	}
+	for (k = 0; k < num_tokens; ++k)
+	{
+		free(argv[k]);
+	}
 	free(argv);
 	return (exit_status);
 }
-
 /**
  * _exec - Creates a child processs to start a new programm.
  *
